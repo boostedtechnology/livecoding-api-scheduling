@@ -17,7 +17,7 @@ Relaxed TypeScript typing is fine.
 
 ### Packages used:
 - Express.js
-- DrizzleORM with SQLite
+- DrizzleORM
 - Vitest
 
 ## Setup
