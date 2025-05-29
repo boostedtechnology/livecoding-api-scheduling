@@ -151,11 +151,11 @@ Implement proper error codes like so:
 Still, no response body is required.
 
 However, you must implement the following use-cases:
-a. Assign the patient impacted by this deletion to a free doctor
-b. If there is no free doctor found in that slot, rebook the patient for **any** doctor's next availability
-c. However, when rebooking, prefer the current doctor (who is canceling the appointment) over others if there are more than one slots available
-d. Use the `emailer` to send a (albeit, fake) notification to the patient about the change. Remember, being an external system, it may crash.
-e. Remember `transactions`? We need to ensure integrity of the system. Provide transactional safety, i.e., all-or-nothing rescheduling.
+- a. Assign the patient impacted by this deletion to a free doctor
+- b. If there is no free doctor found in that slot, rebook the patient for **any** doctor's next availability
+- c. However, when rebooking, prefer the current doctor (who is canceling the appointment) over others if there are more than one slots available
+- d. Use the `emailer` to send a (albeit, fake) notification to the patient about the change. Remember, being an external system, it may crash.
+- e. Remember `transactions`? We need to ensure integrity of the system. Provide transactional safety, i.e., all-or-nothing rescheduling.
 
 Check your work:
 
