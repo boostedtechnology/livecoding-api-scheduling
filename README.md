@@ -120,7 +120,7 @@ It should return the doctor's name as a response like so:
 }
 ```
 
-Do not worry about _data type_ validation. We trust our frontend, today. 🙂
+Do not worry about _data type or format_ validation. We trust our frontend, today. 🙂
 
 At this time, always return a `HTTP 200` status regardless of the outcome, even in error!
 
