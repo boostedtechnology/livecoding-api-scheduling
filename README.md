@@ -139,7 +139,7 @@ npm test -- task3
 
 _Time guideline: 25 minutes_
 
-A doctor cannot make it to the previously posted availability, but there is already a booking in that slot. 
+A doctor cannot make it to the previously posted availability, but there could already be a booking in that slot. 
 
 We have to delete that availability and rebook the affected patients' appointments for another doctor or slot.
 
