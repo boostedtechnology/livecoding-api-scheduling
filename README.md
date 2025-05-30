@@ -10,7 +10,7 @@
 
 Implement a scheduling backend for a telemedicine platform that allows doctors to manage availability, patients to book and cancel appointments, and the system to handle operational integrity, utilization tracking, and real-time rescheduling under disruptions.
 
-Relaxed TypeScript typing is fine.
+Relaxed TypeScript typing is fine. Also, we left some useful imports in the respective routes for your convenience.
 
 ### Prerequisites:
 - Node v22+
@@ -41,7 +41,7 @@ See tests succeed. Check the routes and schemas:
 - `src/routes`
 - `src/db/schema.ts`
 
-Also, fetch the following to see what is available:
+Also, the following has been implemented in this repo so far:
 - `GET /doctors`
 - `GET /doctors/:doctorId/availability`
 - `GET /patients`
@@ -104,7 +104,7 @@ Book an appointment with the following payload:
 
 ```json
 {
-  "doctorId": "doc123",
+  "availabilityId": "avail12",
   "patientId": "pat456",
   "date": "2025-06-15",
   "startTime": "09:30",
@@ -116,9 +116,11 @@ It should return the doctor's name as a response like so:
 
 ```json
 {
-  "name": "Jane Doe"
+  "name": "Jane Doe"  // On error, return "Unknown doctor"
 }
 ```
+
+By the way, the lazy developer who was working on this repo forgot to implement auto-generated id, so can you come up with an appropriate `id` when inserting an appointment row?
 
 Do not worry about _data type or format_ validation. We trust our frontend, today. 🙂
 
@@ -148,9 +150,9 @@ Find the `DELETE /doctors/:doctorId/availability/:availabilityId` route in code.
 Implement proper error codes like so:
 
 ```bash
-200: if successful
+200: on success
 404: if not found
-500: if error
+500: on error
 ```
 
 Still, no response body is required.

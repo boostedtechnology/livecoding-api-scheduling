@@ -14,11 +14,11 @@ app.use('/appointments', appointmentRoutes);
 describe('Task 3: Book Appointment', () => {
   describe('POST /appointments', () => {
     const validPayload = {
-      doctorId: "doc123",
+      availabilityId: "avail1",
       patientId: "pat456", 
       date: "2050-06-15",
-      startTime: "09:30",
-      durationMinutes: 20
+      startTime: "09:00",
+      durationMinutes: 30
     };
 
     it('should return HTTP 200 for valid appointment booking', async () => {
@@ -39,7 +39,7 @@ describe('Task 3: Book Appointment', () => {
 
       // Should return doctor's name
       expect(response.body).toHaveProperty('name');
-      expect(response.body.name).toBe('Jane Doe'); // doc123 is Jane Doe from seed data
+      expect(response.body.name).toBe('Jane Doe'); // avail1 is for doc123 (Jane Doe) from seed data
     });
 
     it('should actually create the appointment in database', async () => {
@@ -53,9 +53,9 @@ describe('Task 3: Book Appointment', () => {
       await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc456", 
+          availabilityId: "avail4", 
           patientId: "pat789",
-          date: "2050-06-16", 
+          date: "2050-06-15", 
           startTime: "10:00",
           durationMinutes: 30
         })
@@ -67,21 +67,21 @@ describe('Task 3: Book Appointment', () => {
 
       // Verify the specific appointment details
       const newAppointment = afterCount.find(apt => 
-        apt.doctorId === "doc456" && 
+        apt.availabilityId === "avail4" && 
         apt.patientId === "pat789" &&
-        apt.date === "2050-06-16"
+        apt.date === "2050-06-15"
       );
       expect(newAppointment).toBeDefined();
       expect(newAppointment?.startTime).toBe("10:00");
       expect(newAppointment?.durationMinutes).toBe(30);
     });
 
-    it('should return HTTP 200 for invalid doctor ID', async () => {
+    it('should return HTTP 200 for invalid availability ID', async () => {
       const response = await request(app)
         .post('/appointments')
         .send({
           ...validPayload,
-          doctorId: "nonexistent"
+          availabilityId: "nonexistent"
         })
         .expect(200);
 
@@ -106,7 +106,7 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail1",
           // Missing required fields
         })
         .expect(200);
@@ -136,11 +136,11 @@ describe('Task 3: Book Appointment', () => {
       await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc789",
+          availabilityId: "avail6",
           patientId: "pat101", 
-          date: "2050-06-17",
+          date: "2050-06-15",
           startTime: "14:00",
-          durationMinutes: 45
+          durationMinutes: 30
         })
         .expect(200);
 
@@ -156,11 +156,11 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc456",
+          availabilityId: "avail5",
           patientId: "pat456",
           date: "2050-06-15", 
-          startTime: "11:00",
-          durationMinutes: 25
+          startTime: "10:30",
+          durationMinutes: 30
         })
         .expect(200);
 
@@ -169,41 +169,41 @@ describe('Task 3: Book Appointment', () => {
       expect(typeof response.body.name).toBe('string');
     });
 
-    it('should return correct doctor names for different doctors', async () => {
-      // Test doc123 (Jane Doe)
+    it('should return correct doctor names for different availability slots', async () => {
+      // Test avail1 (doc123 - Jane Doe)
       const response1 = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail1",
           patientId: "pat456",
-          date: "2050-06-20",
+          date: "2050-06-15",
           startTime: "09:00", 
           durationMinutes: 30
         })
         .expect(200);
       expect(response1.body.name).toBe('Jane Doe');
 
-      // Test doc456 (John Smith) 
+      // Test avail4 (doc456 - John Smith) 
       const response2 = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc456",
+          availabilityId: "avail4",
           patientId: "pat789",
-          date: "2050-06-20",
+          date: "2050-06-15",
           startTime: "10:00",
           durationMinutes: 30
         })
         .expect(200);
       expect(response2.body.name).toBe('John Smith');
 
-      // Test doc789 (Alice Johnson)
+      // Test avail6 (doc789 - Alice Johnson)
       const response3 = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc789", 
+          availabilityId: "avail6", 
           patientId: "pat101",
-          date: "2050-06-20",
-          startTime: "11:00",
+          date: "2050-06-15",
+          startTime: "14:00",
           durationMinutes: 30
         })
         .expect(200);
@@ -216,7 +216,7 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc@123!",
+          availabilityId: "avail@123!",
           patientId: "pat#456$",
           date: "2050-06-15",
           startTime: "09:30", 
@@ -231,7 +231,7 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail1",
           patientId: "pat456",
           date: "invalid-date",
           startTime: "09:30",
@@ -246,7 +246,7 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123", 
+          availabilityId: "avail1", 
           patientId: "pat456",
           date: "2050-06-15",
           startTime: "invalid-time",
@@ -261,10 +261,10 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail1",
           patientId: "pat456", 
           date: "2050-06-15",
-          startTime: "09:30",
+          startTime: "09:00",
           durationMinutes: -10
         })
         .expect(200);
@@ -276,10 +276,10 @@ describe('Task 3: Book Appointment', () => {
       const response = await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail1",
           patientId: "pat456",
           date: "2050-06-15", 
-          startTime: "09:30",
+          startTime: "09:00",
           durationMinutes: 999999
         })
         .expect(200);
@@ -296,9 +296,9 @@ describe('Task 3: Book Appointment', () => {
       await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc123",
+          availabilityId: "avail7",
           patientId: "pat456",
-          date: "2050-06-25", 
+          date: "2050-06-16", 
           startTime: "09:00",
           durationMinutes: 30
         })
@@ -307,10 +307,10 @@ describe('Task 3: Book Appointment', () => {
       await request(app)
         .post('/appointments')
         .send({
-          doctorId: "doc456",
+          availabilityId: "avail8",
           patientId: "pat789",
-          date: "2050-06-25",
-          startTime: "10:00", 
+          date: "2050-06-16",
+          startTime: "09:30", 
           durationMinutes: 30
         })
         .expect(200);
@@ -326,15 +326,15 @@ describe('Task 3: Book Appointment', () => {
       // Simulate concurrent bookings
       const bookingPromises = [
         request(app).post('/appointments').send({
-          doctorId: "doc123", patientId: "pat456", date: "2050-06-30", 
-          startTime: "09:00", durationMinutes: 30
+          availabilityId: "avail9", patientId: "pat456", date: "2050-06-16", 
+          startTime: "10:00", durationMinutes: 30
         }).expect(200),
         request(app).post('/appointments').send({
-          doctorId: "doc456", patientId: "pat789", date: "2050-06-30",
-          startTime: "09:00", durationMinutes: 30  
+          availabilityId: "avail10", patientId: "pat789", date: "2050-06-16",
+          startTime: "11:00", durationMinutes: 30  
         }).expect(200),
         request(app).post('/appointments').send({
-          doctorId: "doc789", patientId: "pat101", date: "2050-06-30",
+          availabilityId: "avail11", patientId: "pat101", date: "2050-06-17",
           startTime: "09:00", durationMinutes: 30
         }).expect(200),
       ];
