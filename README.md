@@ -141,7 +141,7 @@ _Time guideline: 25 minutes_
 
 A doctor cannot make it to the previously posted availability, but there could already be a booking in that slot. 
 
-We have to delete that availability and rebook the affected patients' appointments for another doctor or slot.
+We have to delete that availability and rebook the affected patient's appointment for another doctor or slot.
 
 Find the `DELETE /doctors/:doctorId/availability/:availabilityId` route in code.
 
