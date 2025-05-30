@@ -71,15 +71,18 @@ _Time guideline: 10 minutes_
 
 Implement in the `DELETE /appointments/:appointmentId` route:
 
-Find the `src/utils/emailer` utility. We need to send (albeit, fake) notifications to both patients and doctors using the `emailer` once an appointment is deleted. 
+Find the `src/utils/emailer` utility. We need to send (albeit fake) notifications to both patients and doctors using the `emailer` once an appointment is deleted. 
 
 However, because the email is an external system, handle the case for `emailer` failure. If the appointment is deleted, but the `emailer` crashes, that would put the system into an inconsistent state, wouldn't it? So, rollback a delete if the `emailer` fails.
 
-For now, return `HTTP 200` in any case! No response body required.
+For now, return `HTTP 200` in any case! No response body is required.
 
 Relevant documentation: 
-- Drizzle: https://orm.drizzle.team/docs/transactions
-- We are using PGLite as the database: https://pglite.dev/docs/api#transaction 
+- We are using PGLite as the database: https://pglite.dev/docs/api#transaction
+- DrizzleORM
+  - `transactions` : https://orm.drizzle.team/docs/transactions
+  - `join`: https://orm.drizzle.team/docs/joins
+    - We already implemented a sample `join` for you in `src/routes/appointments/get-appointments.ts` 
 
 But, most importantly, we left a pesudocode for you at `src/routes/appointments/delete-appointment.ts`
 
@@ -123,8 +126,6 @@ At this time, always return a `HTTP 200` status regardless of the outcome, even 
 
 Drizzle documentation on:
 - insert: https://orm.drizzle.team/docs/insert
-- join: https://orm.drizzle.team/docs/joins
-  - We already implemented a sample `join` for you in `src/routes/appointments/get-appointments.ts`
 
 Watch out for the edge cases!
 
@@ -138,7 +139,9 @@ npm test -- task3
 
 _Time guideline: 25 minutes_
 
-A doctor called in sick, so they are deleting their availability and we have to rebook the affected patients' appointments.
+A doctor cannot make it to the previously posted availability, but there is already a booking in that slot. 
+
+We have to delete that availability and rebook the affected patients' appointments for another doctor or slot.
 
 Find the `DELETE /doctors/:doctorId/availability/:availabilityId` route in code.
 
@@ -153,10 +156,10 @@ Implement proper error codes like so:
 Still, no response body is required.
 
 However, you must implement the following use-cases:
-- a. Assign the patient impacted by this deletion to the next available doctor
+- a. Assign the patient impacted by this deletion to the next available doctor for the same time slot
 - b. If there is no available doctor found in that slot, rebook the patient for **any** doctor's next availability
-- c. However, when rebooking, prefer the current doctor (who is canceling the appointment) over others if there are more than one slots available
-- d. Use the `emailer` to send a (albeit, fake) notification to the patient about the change. Remember, being an external system, it may crash.
+- c. However, when rebooking, prefer the current doctor (who is canceling the availability) over others if there are more than one slots available
+- d. Use the `emailer` to send a (albeit fake) notification to the patient about the change. Remember, being an external system, it may crash.
 - e. Remember `transactions`? We need to ensure integrity of the system. Provide transactional safety, i.e., all-or-nothing rescheduling.
 
 Check your work:
