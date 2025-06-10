@@ -71,7 +71,7 @@ _Time guideline: 10 minutes_
 
 Implement in the `DELETE /appointments/:appointmentId` route:
 
-Find the `src/utils/emailer` utility. We need to send (albeit fake) notifications to both patients and doctors using the `emailer` once an appointment is deleted. 
+Find the `src/utils/emailer` utility. We need to send (albeit fake) notifications to both the patient and the doctor using the `emailer` once an appointment is deleted. 
 
 However, because the email is an external system, handle the case for `emailer` failure. If the appointment is deleted, but the `emailer` crashes, that would put the system into an inconsistent state, wouldn't it? So, rollback a delete if the `emailer` fails.
 
